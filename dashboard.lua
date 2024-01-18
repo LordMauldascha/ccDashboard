@@ -1,0 +1,1 @@
+-- Computercraft os 1.7 Dashboard working with 4x3 monitors
