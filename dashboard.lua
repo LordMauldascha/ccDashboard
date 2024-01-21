@@ -130,6 +130,14 @@ function ideasScreen(x, y)
   printCentered(monitor, 2, "Ideas", colors.white, colors.green)
   drawBox(2, 4, mW-3, mH-7, colors.black)
 
+  -- Check if ideas file exists
+  if not fs.exists("ideas.txt") then
+    -- Create ideas file
+    local ideasFile = fs.open("ideas.txt", "w")
+    ideasFile.write(textutils.serialiseJSON({ideas = {}}))
+    ideasFile.close()
+  end
+
   -- Get Contents of ideas file
   local ideasFile = fs.open("ideas.txt", "r")
   local ideas = ideasFile.readAll()
