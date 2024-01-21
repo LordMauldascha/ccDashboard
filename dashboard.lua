@@ -12,6 +12,7 @@ local author = "Levi"
 local monitor = peripheral.wrap("top")
 local mW, mH = monitor.getSize()
 local path = "/disk/ideas.txt"
+local backgroundcolor = colors.gray
 
 -- redirect console to monitor
 term.redirect(monitor)
@@ -444,21 +445,104 @@ function addIdeaScreen()
 end
 
 -- Settings Screen
-function settingsScreen(touchX, touchY)
+function settingsScreen()
   setBackgroundColor(colors.gray)
   printDevTools()
-  monitor.setCursorPos(2,2)
-  monitor.write("Settings")
-  printBottom(monitor, "<- Back to Main Screen")
+  printCentered(monitor, 2, "Settings", colors.white, colors.green)
+  printBottom(monitor, "<- Back to Main Screen", 2)
+
+  -- TODO: Settings Background color
+
+  -- Print settings box
+  drawBox(2, 4, mW-3, mH-7, colors.black)
+
+  -- Print settings background color
+  printText(monitor, 3, 5, "Background Color", colors.white, colors.black)
+  monitor.setBackgroundColor(backgroundcolor)
+  monitor.setCursorPos(20, 5)
+  monitor.write("  ")
 
   -- Settings screen loop
   while true do
     local event, side, x, y = os.pullEvent("monitor_touch")
 
+    -- Check if background color is pressed
+    if x >= 20 and x <= 21 and y >= 5 and y <= 5 then
+      -- Open Menu to select color
+      selectBackgroundColor()
+      break
+    end
+
     -- Check if back button is pressed
     local back = checkTouchBack(x, y, "main")
     if back then
       break
+    end
+  end
+end
+
+function selectBackgroundColor()
+  setBackgroundColor(colors.gray)
+  printDevTools()
+  printCentered(monitor, 2, "Select Background Color", colors.white, colors.green)
+
+  printBottom(monitor, "<- Back to Settings", 2)
+
+  -- Print colors
+  local colors = {
+    colors.white, colors.orange, colors.magenta, colors.lightBlue, colors.yellow, colors.lime, colors.pink, colors.gray,
+    colors.lightGray, colors.cyan, colors.purple, colors.blue, colors.brown, colors.green, colors.red, colors.black
+  }
+
+  local colorX = 3
+  local colorY = 5
+
+  for i = 1, #colors do
+    printText(monitor, colorX, colorY, "  ", colors[i], colors[i])
+    colorX = colorX + 2
+    if i == 8 then
+      colorX = 3
+      colorY = colorY + 1
+    end
+  end
+
+  -- Select background color loop
+  while true do
+    local event, side, x, y = os.pullEvent("monitor_touch")
+
+    -- Check if color is pressed
+    if x >= 3 and x <= 5 and y >= 5 and y <= 5 then
+      backgroundcolor = colors.white
+    elseif x >= 7 and x <= 9 and y >= 5 and y <= 5 then
+      backgroundcolor = colors.orange
+    elseif x >= 11 and x <= 13 and y >= 5 and y <= 5 then
+      backgroundcolor = colors.magenta
+    elseif x >= 15 and x <= 17 and y >= 5 and y <= 5 then
+      backgroundcolor = colors.lightBlue
+    elseif x >= 19 and x <= 21 and y >= 5 and y <= 5 then
+      backgroundcolor = colors.yellow
+    elseif x >= 23 and x <= 25 and y >= 5 and y <= 5 then
+      backgroundcolor = colors.lime
+    elseif x >= 27 and x <= 29 and y >= 5 and y <= 5 then
+      backgroundcolor = colors.pink
+    elseif x >= 31 and x <= 33 and y >= 5 and y <= 5 then
+      backgroundcolor = colors.gray
+    elseif x >= 3 and x <= 5 and y >= 6 and y <= 6 then
+      backgroundcolor = colors.lightGray
+    elseif x >= 7 and x <= 9 and y >= 6 and y <= 6 then
+      backgroundcolor = colors.cyan
+    elseif x >= 11 and x <= 13 and y >= 6 and y <= 6 then
+      backgroundcolor = colors.purple
+    elseif x >= 15 and x <= 17 and y >= 6 and y <= 6 then
+      backgroundcolor = colors.blue
+    elseif x >= 19 and x <= 21 and y >= 6 and y <= 6 then
+      backgroundcolor = colors.brown
+    elseif x >= 23 and x <= 25 and y >= 6 and y <= 6 then
+      backgroundcolor = colors.green
+    elseif x >= 27 and x <= 29 and y >= 6 and y <= 6 then
+      backgroundcolor = colors.red
+    elseif x >= 31 and x <= 33 and y >= 6 and y <= 6 then
+      backgroundcolor = colors.black
     end
   end
 end
