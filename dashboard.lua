@@ -11,6 +11,7 @@ local author = "Levi"
 -- Variables
 local monitor = peripheral.wrap("top")
 local mW, mH = monitor.getSize()
+local path = "/disk/ideas.txt"
 
 -- redirect console to monitor
 term.redirect(monitor)
@@ -133,16 +134,21 @@ function ideasScreen(x, y)
   printCentered(monitor, 2, "Ideas", colors.white, colors.green)
   drawBox(2, 4, mW-3, mH-7, colors.black)
 
+  -- Check if ideas path exists
+  if not fs.exists("/disk") then
+    path = "ideas.txt"
+  end
+
   -- Check if ideas file exists
-  if not fs.exists("ideas.txt") then
+  if not fs.exists(path) then
     -- Create ideas file
-    local ideasFile = fs.open("ideas.txt", "w")
+    local ideasFile = fs.open(path, "w")
     ideasFile.write(textutils.serialiseJSON({ideas = {}}))
     ideasFile.close()
   end
 
   -- Get Contents of ideas file
-  local ideasFile = fs.open("ideas.txt", "r")
+  local ideasFile = fs.open(path, "r")
   local ideas = ideasFile.readAll()
   ideasFile.close()
 
@@ -189,7 +195,7 @@ function ideasScreen(x, y)
           end
 
           -- Save ideas to file
-          local ideasFile = fs.open("ideas.txt", "w")
+          local ideasFile = fs.open(path, "w")
           ideasFile.write(textutils.serialiseJSON(ideas))
           ideasFile.close()
           -- Reload ideas screen
@@ -206,7 +212,7 @@ function ideasScreen(x, y)
           end
 
           -- Save ideas to file
-          local ideasFile = fs.open("ideas.txt", "w")
+          local ideasFile = fs.open(path, "w")
           ideasFile.write(textutils.serialiseJSON(ideas))
           ideasFile.close()
           -- Reload ideas screen
@@ -403,7 +409,7 @@ function addIdeaScreen()
     -- Check if add button is pressed
     if x >= 17 and x <= 31 and y >= keyboardY+4 and y <= keyboardY+4 then
       -- Get Contents of ideas file
-      local ideasFile = fs.open("ideas.txt", "r")
+      local ideasFile = fs.open(path, "r")
       local ideas = ideasFile.readAll()
       ideasFile.close()
 
@@ -419,7 +425,7 @@ function addIdeaScreen()
       end
 
       -- Save ideas to file
-      local ideasFile = fs.open("ideas.txt", "w")
+      local ideasFile = fs.open(path, "w")
       ideasFile.write(textutils.serialiseJSON(ideas))
       ideasFile.close()
 
