@@ -1,7 +1,10 @@
 -- Computercraft os 1.7 Dashboard working with 4x3 monitors
 
+-- Load API json
+os.loadAPI("json")
+
 -- Config
-local dev = true
+local dev = false
 local version = "Alpha 0.1"
 local author = "Levi"
 
@@ -149,7 +152,7 @@ function ideasScreen(x, y)
   monitor.setBackgroundColor(colors.black)
 
   -- Convert JSON to table
-  local ideas = textutils.unserialiseJSON(ideas)
+  local ideas = json.decode(ideas)
 
   for i = 1, #ideas.ideas do
     monitor.setBackgroundColor(colors.black)
@@ -405,7 +408,7 @@ function addIdeaScreen()
       ideasFile.close()
 
       -- Convert JSON to table
-      local ideas = textutils.unserialiseJSON(ideas)
+      local ideas = json.decode(ideas)
 
       -- Add new idea to table
       table.insert(ideas.ideas, {text = word, done = false, row = 0})
